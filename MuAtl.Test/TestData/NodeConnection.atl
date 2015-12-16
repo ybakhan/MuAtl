@@ -1,0 +1,20 @@
+library NodeConnection;
+
+helper context UCM!"ucm::map::NodeConnection" def : getLabel() 
+	: String 
+	= if self.condition.oclIsUndefined() 
+	  then
+	  	''
+	  else
+	  	self.condition.label
+	  endif;
+
+
+helper context UCM!"ucm::map::NodeConnection" def: getSourceUmlNode()
+	:  UML!Node = self.source.getUmlNode();
+
+helper context UCM!"ucm::map::NodeConnection" def: getUmlEdge()
+	:  UML!ControlFlow = thisModule.edgeMap->get(self);
+
+helper context UCM!"ucm::map::NodeConnection" def: getTargetUmlNode()
+	:  UML!Node = self.target.getUmlNode();

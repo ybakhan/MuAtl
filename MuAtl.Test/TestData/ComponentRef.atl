@@ -1,0 +1,47 @@
+library ComponentRef;
+
+--Component reference Context
+helper context UCM!"ucm::map::ComponentRef" def: getUmlSubGroups()
+	: Sequence(UML!ActivityPartition) 
+	= self.children->collect(c | thisModule.InitUmlGroup(c));
+
+helper context UCM!"ucm::map::ComponentRef" def: getUmlNodes()
+	: Sequence(UML!Node) = self.nodes->collect(n | n.getUmlNode());
+
+helper context  UCM!"ucm::map::ComponentRef" def : hasStubs()
+	: Boolean = self.contDef.hasStubs();
+
+helper context UCM!"ucm::map::ComponentRef" def : hasNoChildren()
+	: Boolean 
+	= self.children->size() = 0;
+
+helper context UCM!"ucm::map::ComponentRef" def : hasParent()
+	: Boolean 
+	= not self.parent->oclIsUndefined();
+
+helper context UCM!"ucm::map::ComponentRef" def : getKind()
+	: String 
+	= self.contDef.kind;
+
+helper context UCM!"ucm::map::ComponentRef" def : groupName()
+	: String 
+	= self.contDef.name + ' (' + self.contDef.kind + ')';
+
+helper context UCM!"ucm::map::ComponentRef" def : getName()
+	: String 
+	= self.getActivityPartitionName();
+
+helper context UCM!"ucm::map::ComponentRef"  def : getAllStubs()
+	: Sequence(UCM!"ucm::map::Stub") 
+ 	=  self.nodes->select(n | 
+ 		n.oclIsTypeOf(UCM!"ucm::map::Stub")); 
+
+helper context UCM!"ucm::map::ComponentRef"  def : getStubs()
+	: Sequence(UCM!"ucm::map::Stub") 
+	=  self.getAllStubs()->select(s |
+		not s.isDynamic()); 
+
+helper context UCM!"ucm::map::ComponentRef"  def : getDynamicStubs()
+	: Sequence(UCM!"ucm::map::Stub") 
+	=  self.getAllStubs()->select(s | 
+		s.isDynamic()); 

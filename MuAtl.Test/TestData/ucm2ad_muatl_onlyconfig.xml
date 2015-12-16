@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MuAtlProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Name>ucm2ad_muatl</Name>
+  <Module>TestData\ucm2ad.atl</Module>
+  <Dependency>
+    <InMetamodels>
+      <Metamodel>
+        <Name>UCM</Name>
+        <Path>TestData\ucm.ecore</Path>
+        <Dependencies>
+          <Metamodel>
+            <Name>URN</Name>
+            <Path>TestData\urn.ecore</Path>
+            <Dependencies />
+          </Metamodel>
+        </Dependencies>
+      </Metamodel>
+    </InMetamodels>
+    <OutMetamodel>
+      <Name>UML</Name>
+      <Path>TestData\UML.ecore</Path>
+      <Dependencies />
+    </OutMetamodel>
+    <InModels>
+      <InModel>
+        <Name>map</Name>
+        <Metamodels>
+          <Name>UCM</Name>
+          <Dependencies />
+        </Metamodels>
+        <MetamodelInfo>UCM;</MetamodelInfo>
+      </InModel>
+    </InModels>
+    <OutputModel>
+      <Name>uml</Name>
+    </OutputModel>
+    <Libraries>
+      <AtlLibrary>
+        <Name>PathNode</Name>
+        <Path>TestData\PathNode.atl</Path>
+      </AtlLibrary>
+      <AtlLibrary>
+        <Name>Component</Name>
+        <Path>TestData\Component.atl</Path>
+      </AtlLibrary>
+      <AtlLibrary>
+        <Name>Stub</Name>
+        <Path>TestData\Stub.atl</Path>
+      </AtlLibrary>
+      <AtlLibrary>
+        <Name>UCMmap</Name>
+        <Path>TestData\UCMmap.atl</Path>
+      </AtlLibrary>
+      <AtlLibrary>
+        <Name>ComponentRef</Name>
+        <Path>TestData\ComponentRef.atl</Path>
+      </AtlLibrary>
+      <AtlLibrary>
+        <Name>NodeConnection</Name>
+        <Path>TestData\NodeConnection.atl</Path>
+      </AtlLibrary>
+    </Libraries>
+    <SuperImposedModules />
+  </Dependency>
+</MuAtlProject>

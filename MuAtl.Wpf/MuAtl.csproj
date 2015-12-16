@@ -1,0 +1,383 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Antlr4.4.3.0\build\Antlr4.props" Condition="Exists('..\packages\Antlr4.4.3.0\build\Antlr4.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{0832924E-04F2-43EB-882D-C1EA61D00F17}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MuAtl</RootNamespace>
+    <AssemblyName>MuAtl</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <NuGetPackageImportStamp>c2f35ae0</NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>MuAtl.App</StartupObject>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Antlr4.Runtime.net45, Version=4.3.0.0, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Antlr4.Runtime.4.3.0\lib\net45\Antlr4.Runtime.net45.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="GalaSoft.MvvmLight, Version=5.2.0.37222, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
+      <HintPath>..\packages\MvvmLightLibs.5.2.0.0\lib\net45\GalaSoft.MvvmLight.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="GalaSoft.MvvmLight.Extras, Version=5.2.0.37222, Culture=neutral, PublicKeyToken=669f0b5e8f868abf, processorArchitecture=MSIL">
+      <HintPath>..\packages\MvvmLightLibs.5.2.0.0\lib\net45\GalaSoft.MvvmLight.Extras.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="GalaSoft.MvvmLight.Platform, Version=5.2.0.37226, Culture=neutral, PublicKeyToken=5f873c45e98af8a1, processorArchitecture=MSIL">
+      <HintPath>..\packages\MvvmLightLibs.5.2.0.0\lib\net45\GalaSoft.MvvmLight.Platform.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\MvvmLightLibs.5.2.0.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="Xceed.Wpf.Toolkit, Version=2.6.15111.10510, Culture=neutral, PublicKeyToken=ba83ff368b7563c6, processorArchitecture=MSIL">
+      <HintPath>..\packages\Xceed.Wpf.Toolkit.2.6.15111.10510\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="Model\AtlLibrary.cs" />
+    <Compile Include="Model\ProjectConfig.cs" />
+    <Compile Include="Model\InModel.cs" />
+    <Compile Include="Model\Metamodel.cs" />
+    <Compile Include="Model\ModelBase.cs" />
+    <Compile Include="Model\MuAtlInput.cs" />
+    <Compile Include="Model\MuAtlJavaArgs\CompilerArg.cs" />
+    <Compile Include="Model\MuAtlJavaArgs\ContentTypeArg.cs" />
+    <Compile Include="Model\MuAtlJavaArgs\HandlerArg.cs" />
+    <Compile Include="Model\MuAtlJavaArgs\InArg.cs" />
+    <Compile Include="Model\MuAtlJavaArgs\InterModelReferencesArg.cs" />
+    <Compile Include="Model\MuAtlJavaArgs\LibArg.cs" />
+    <Compile Include="Model\MuAtlJavaArgs\LogFileArg.cs" />
+    <Compile Include="Model\MuAtlJavaArgs\ModuleArg.cs" />
+    <Compile Include="Model\MuAtlJavaArgs\MuAtlJavaArg.cs" />
+    <Compile Include="Model\MuAtlJavaArgs\OutArg.cs" />
+    <Compile Include="Model\MuAtlJavaArgs\StopInMainArg.cs" />
+    <Compile Include="Model\MuAtlJavaArgs\SuperimposedModuleArg.cs" />
+    <Compile Include="Model\MuAtlJavaArgs\Uml2StereoTypesArg.cs" />
+    <Compile Include="Model\MuAtlJavaArgs\VmArg.cs" />
+    <Compile Include="Model\MuAtlMutant.cs" />
+    <Compile Include="Model\MuAtlOutput.cs" />
+    <Compile Include="Model\MuAtlProject.cs" />
+    <Compile Include="Model\MuAtlResult.cs" />
+    <Compile Include="Model\MuAtlTestCase.cs" />
+    <Compile Include="Model\MuAtlTestCaseOutput.cs" />
+    <Compile Include="Model\MuAtlTestSuite.cs" />
+    <Compile Include="Model\MuAtlVerdict.cs" />
+    <Compile Include="Model\OutModel.cs" />
+    <Compile Include="Model\SuperImposedModule.cs" />
+    <Compile Include="Service\ATL.g4.lexer.cs">
+      <DependentUpon>ATL.g4</DependentUpon>
+    </Compile>
+    <Compile Include="Service\ATL.g4.parser.cs">
+      <DependentUpon>ATL.g4</DependentUpon>
+    </Compile>
+    <Compile Include="Service\Differ.cs" />
+    <Compile Include="Service\ExpressionStatContextExtension.cs" />
+    <Compile Include="Service\LogService.cs" />
+    <Compile Include="Service\Reader\Model\AamCandidate.cs" />
+    <Compile Include="Service\Reader\Model\AfeCandidate.cs" />
+    <Compile Include="Service\Reader\Model\CttCandidate.cs" />
+    <Compile Include="Service\Reader\Model\CstCandidate.cs" />
+    <Compile Include="Service\Reader\Model\DamCandidate.cs" />
+    <Compile Include="Service\Reader\Model\DfeCandidate.cs" />
+    <Compile Include="Service\Reader\Model\MutationCandidate.cs" />
+    <Compile Include="Service\Reader\Model\DusCandidate.cs" />
+    <Compile Include="Service\Reader\Model\RuleCandidate.cs" />
+    <Compile Include="Service\Reader\Model\L2mCandidate.cs" />
+    <Compile Include="Service\Reader\Model\DrsCandidate.cs" />
+    <Compile Include="Service\Reader\Model\M2lCandidate.cs" />
+    <Compile Include="Service\Reader\ConfigListener.cs" />
+    <Compile Include="Service\RuleContextExtension.cs" />
+    <Compile Include="Service\Reader\MuCandidateListener.cs" />
+    <Compile Include="Service\AtlTokenizer.cs" />
+    <Compile Include="Service\AtlParser.cs" />
+    <Compile Include="Service\Generator\MutantGenerator.cs" />
+    <Compile Include="Service\Generator\MutantGenerationListener.cs" />
+    <Compile Include="Service\Oracle.cs" />
+    <Compile Include="Service\Runner\MuAtlJarRunner.cs" />
+    <Compile Include="Service\ResultExporter.cs" />
+    <Compile Include="ViewModel\Util\SelectionList.cs" />
+    <Compile Include="ViewModel\Util\SelectionItem.cs" />
+    <Compile Include="View\Util\Converter\AamCandidateConverter.cs" />
+    <Compile Include="View\Util\Converter\BiCollectionCountToVisibilityConverter.cs" />
+    <Compile Include="View\Util\Converter\InvertedVisibilityConverter.cs" />
+    <Compile Include="View\Util\Converter\InvCollectionCountToVisibilityConverter.cs" />
+    <Compile Include="View\Util\Converter\CttCandidateConverter.cs" />
+    <Compile Include="View\Util\Converter\StrToVis.cs" />
+    <Compile Include="View\Util\Converter\SelectedCttToVisibilityConverter.cs" />
+    <Compile Include="View\Util\Converter\DfeSelectionListToIsChecked.cs" />
+    <Compile Include="View\Util\Converter\DfeCandidateConverter.cs" />
+    <Compile Include="View\Util\Converter\DamSelectionListToIsChecked.cs" />
+    <Compile Include="View\Util\Converter\DamCandidateConverter.cs" />
+    <Compile Include="View\Util\Converter\DusSelectionListToIsChecked.cs" />
+    <Compile Include="View\Util\Converter\DusCandidateConverter.cs" />
+    <Compile Include="View\Util\Converter\L2mRuleSelectionListToIsChecked.cs" />
+    <Compile Include="View\Util\Converter\L2mCandidateConverter.cs" />
+    <Compile Include="View\Util\Converter\M2lRuleSelectionListToIsChecked.cs" />
+    <Compile Include="View\Util\Converter\M2lCandidateConverter.cs" />
+    <Compile Include="View\Util\Converter\DrsCandidateConverter.cs" />
+    <Compile Include="View\Util\Converter\DrsRuleSelectionListToIsChecked.cs" />
+    <Compile Include="View\Util\Converter\RuleSelectionListToIsChecked.cs" />
+    <Compile Include="View\Util\Converter\GroupCollectionToIsChecked.cs" />
+    <Compile Include="View\Util\Converter\MutantTestSuiteConverter.cs" />
+    <Compile Include="View\Util\Converter\SelectedCstToVisibilityConverter.cs" />
+    <Compile Include="View\Util\Converter\SelectionListToIsChecked.cs" />
+    <Compile Include="Service\Runner\MutantRunner.cs" />
+    <Compile Include="ViewModel\Base\MutantViewModelBase.cs" />
+    <Compile Include="ViewModel\ResultsViewModel.cs" />
+    <Compile Include="ViewModel\TestSuiteViewModel.cs" />
+    <Compile Include="View\Util\Converter\CollectionCountToVisibilityConverter.cs" />
+    <Compile Include="View\Util\Converter\InverseBooleanConverter.cs" />
+    <Compile Include="Service\DialogService.cs" />
+    <Compile Include="Service\Repository.cs" />
+    <Compile Include="ViewModel\Base\MuAtlViewModelBase.cs" />
+    <Compile Include="ViewModel\ConfigViewModel.cs" />
+    <Compile Include="ViewModel\ProjectViewModel.cs" />
+    <Compile Include="ViewModel\RunTestsViewModel.cs" />
+    <Compile Include="ViewModel\MutantsViewModel.cs" />
+    <Compile Include="ViewModel\ViewModelLocator.cs" />
+    <Compile Include="View\ConfigView.xaml.cs">
+      <DependentUpon>ConfigView.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="View\ProjectView.xaml.cs">
+      <DependentUpon>ProjectView.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="View\ResultsView.xaml.cs">
+      <DependentUpon>ResultsView.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="View\MuAtlViewBase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="View\RunTestsView.xaml.cs">
+      <DependentUpon>RunTestsView.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="View\MutantsView.xaml.cs">
+      <DependentUpon>MutantsView.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="View\TestSuiteView.xaml.cs">
+      <DependentUpon>TestSuiteView.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="View\Util\BorderGrid.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="View\Util\DragDrop\DragDropHelper.cs" />
+    <Compile Include="View\Util\DragDrop\DraggedAdorner.cs" />
+    <Compile Include="View\Util\DragDrop\InsertionAdorner.cs" />
+    <Compile Include="View\Util\MuAtlDataGrid.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="View\Util\Paging\CollectionViewGroupInternal.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="View\Util\Paging\CollectionViewGroupRoot.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="View\Util\Paging\IPagedCollectionView.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="View\Util\Paging\PageChangingEventArgs.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="View\Util\Paging\PagedCollectionView.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="View\Util\Paging\PagedCollectionViewResources.Designer.cs">
+      <DependentUpon>PagedCollectionViewResources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="View\Util\Paging\PagedCollectionViewResources.Designer.cs.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="View\Util\Paging\TypeHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="Resource\MuAtlGridStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="Resource\Styles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\ConfigView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ProjectView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ResultsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\RunTestsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MutantsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\TestSuiteView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Util\Paging\PagedCollectionViewResources.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>PagedCollectionViewResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="app.config" />
+    <None Include="log4net.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+    <Antlr4 Include="Service\ATL.g4">
+      <Generator>MSBuild:Compile</Generator>
+      <CustomToolNamespace>MuAtl.Service</CustomToolNamespace>
+    </Antlr4>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\Images\Save_6530.png" />
+    <Resource Include="Resource\Images\NewFile_6276.png" />
+    <Resource Include="Resource\Images\OpenFile.png" />
+    <Resource Include="Resource\Images\ATL_32xLG.png" />
+    <Resource Include="Resource\Images\Module_8332_32.bmp" />
+    <Resource Include="Resource\Images\test_32x_LG.png" />
+    <Resource Include="Resource\Images\RunTests_8790_32.bmp" />
+    <Resource Include="Resource\Images\Running_16xLG.png" />
+    <Resource Include="Resource\Images\mu.png" />
+    <Resource Include="Resource\Images\run.png" />
+    <Resource Include="Resource\Images\testcase.png" />
+    <Resource Include="Resource\Images\test_tube.png" />
+    <Resource Include="Resource\Images\run.ico" />
+    <Resource Include="Resource\Images\run1.ico" />
+    <Resource Include="Resource\Images\run2.ico" />
+    <Resource Include="Resource\Images\test_tube.ico" />
+    <Resource Include="Resource\Images\test_tube2.ico" />
+    <Resource Include="Resource\Images\AtlLogo.png" />
+    <Resource Include="Resource\Images\atl2.png" />
+    <Content Include="muatl.jar">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Antlr4.4.3.0\build\Antlr4.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Antlr4.4.3.0\build\Antlr4.props'))" />
+    <Error Condition="!Exists('..\packages\Antlr4.4.3.0\build\Antlr4.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Antlr4.4.3.0\build\Antlr4.targets'))" />
+  </Target>
+  <Import Project="..\packages\Antlr4.4.3.0\build\Antlr4.targets" Condition="Exists('..\packages\Antlr4.4.3.0\build\Antlr4.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

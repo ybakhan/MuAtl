@@ -1,0 +1,129 @@
+﻿<Window x:Class="MuAtl.View.ProjectView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ignore="http://www.ignore.com"
+        mc:Ignorable="d ignore"
+        WindowStartupLocation="CenterScreen"
+        WindowState="Maximized"
+        xmlns:vm="clr-namespace:MuAtl.ViewModel"
+        xmlns:view="clr-namespace:MuAtl.View"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"       
+        xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
+        DataContext="{Binding MuAtlProjectViewModel, Source={StaticResource Locator}}">
+  
+  <Window.InputBindings>
+    <KeyBinding Command="{Binding NewCmd}"
+                Gesture="CTRL+N" />
+    <KeyBinding Command="{Binding OpenCmd}"
+                Gesture="CTRL+O" />
+    <KeyBinding Command="{Binding SaveCmd}"
+                Gesture="CTRL+S" />
+    <KeyBinding Command="{Binding ExitCmd}"
+                Gesture="ALT+F4" />
+  </Window.InputBindings>
+  
+  <DockPanel>
+    
+    <Menu DockPanel.Dock="Top">
+      <MenuItem Header="Project">
+        <MenuItem Header="New" Command="{Binding NewCmd}"/>
+        <MenuItem Header="Open" Command="{Binding OpenCmd}" />
+        <MenuItem Header="Save" Command="{Binding SaveCmd}"/>
+        <MenuItem Header="Save As" Command="{Binding SaveAsCmd}"/>
+        <MenuItem Header="Exit" Command="{Binding ExitCmd}"/>
+      </MenuItem>
+    </Menu>
+    
+    <ScrollViewer 
+        HorizontalScrollBarVisibility="Auto" 
+        VerticalScrollBarVisibility="Auto">
+
+      <StackPanel Margin="5">
+
+        <TabControl>
+          
+          <TabItem>
+            <TabItem.HeaderTemplate>
+              <DataTemplate>
+                <TextBlock Text="Setup" 
+                           Width="150" 
+                           HorizontalAlignment="Left" />
+              </DataTemplate>
+            </TabItem.HeaderTemplate>
+            <view:ConfigView HorizontalAlignment="Left"
+               Project="{Binding DataContext.Project, Mode=TwoWay, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+ />
+          </TabItem>
+
+          <TabItem>
+
+            <TabItem.HeaderTemplate>
+              <DataTemplate>
+                <TextBlock Text="Test Cases" 
+                           Width="150" 
+                           HorizontalAlignment="Left" />
+              </DataTemplate>
+            </TabItem.HeaderTemplate>
+
+            <view:TestSuiteView 
+              Project="{Binding DataContext.Project, Mode=TwoWay, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"/>
+                      
+          </TabItem>
+          
+          <TabItem>
+
+            <TabItem.HeaderTemplate>
+              <DataTemplate>
+                <TextBlock Text="Mutants" 
+                           Width="150" 
+                           HorizontalAlignment="Left" />
+              </DataTemplate>
+            </TabItem.HeaderTemplate>
+
+            <view:MutantsView HorizontalAlignment="Left"
+              Project="{Binding DataContext.Project, Mode=TwoWay, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                             />
+          
+          </TabItem>
+          
+          <TabItem>
+
+            <TabItem.HeaderTemplate>
+              <DataTemplate>
+                <TextBlock Text="Run Tests"
+                           Width="150"
+                           HorizontalAlignment="Left" />
+              </DataTemplate>
+            </TabItem.HeaderTemplate>
+
+            <view:RunTestsView HorizontalAlignment="Left"
+                Project="{Binding DataContext.Project, Mode=TwoWay, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"/>
+            
+          </TabItem>
+
+          <TabItem>
+
+            <TabItem.HeaderTemplate>
+              <DataTemplate>
+                <TextBlock Text="Results"
+                           Width="150"
+                           HorizontalAlignment="Left" />
+              </DataTemplate>
+            </TabItem.HeaderTemplate>
+
+            <view:ResultsView HorizontalAlignment="Left"
+                Project="{Binding DataContext.Project, Mode=TwoWay, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"/>
+
+
+          </TabItem>
+
+        </TabControl>
+
+      </StackPanel>
+
+    </ScrollViewer>
+
+  </DockPanel>
+</Window>

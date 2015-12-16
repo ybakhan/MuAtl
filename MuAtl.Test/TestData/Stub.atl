@@ -1,0 +1,46 @@
+library Stub;
+
+--Stub Context
+helper context UCM!"ucm::map::Stub" def: getCondition(map: UCM!"ucm::map::UCMmap")
+	: String = self.bindings->any(b | b.plugin = map).precondition.label;
+
+helper context UCM!"ucm::map::Stub" def: getUmlGroup()
+	: UML!ActivityPartition = thisModule.stubMap->get(self);
+
+helper context UCM!"ucm::map::Stub" def : getMap()
+	: UCM!"ucm::map::UCMmap" 
+	= self.bindings->first().plugin;
+
+helper context UCM!"ucm::map::Stub" def : getMaps()
+	: Sequence(UCM!"ucm::map::UCMmap") 
+	= self.bindings->collect(b | b.plugin);
+
+helper context UCM!"ucm::map::Stub" def: firstPredecessor()
+	: UCM!"ucm::map::NodeConnection" = self.pred->first();
+
+helper context UCM!"ucm::map::Stub" def: firstSuccessor()
+	: UCM!"ucm::map::NodeConnection" = self.succ->first();
+
+helper context UCM!"ucm::map::Stub" def : isDynamic()
+	: Boolean 
+	= self.bindings->size() > 1;
+
+helper context UCM!"ucm::map::Stub" def : isStatic()
+	: Boolean 
+	= self.bindings->size() <= 1;
+
+helper context UCM!"ucm::map::Stub" def : isComponentPart()
+ 	: Boolean 
+	= not self.contRef->oclIsUndefined();
+
+helper context UCM!"ucm::map::Stub" def : getParentComponent()
+	: UCM!"urncore::Component" 
+	= self.contRef;
+
+helper context UCM!"ucm::map::Stub" def: getStartPoint() 
+	: UCM!"ucm::map::PathNode" 
+	=  self.getMap().getFirstStartPoint();
+
+helper context UCM!"ucm::map::Stub" def: getEndPoint() 
+	: UCM!"ucm::map::PathNode"	
+	=  self.getMap().getFirstEndPoint();

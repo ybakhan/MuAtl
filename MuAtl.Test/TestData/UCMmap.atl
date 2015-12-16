@@ -1,0 +1,37 @@
+library UCMmap;
+
+--Map Context
+
+helper context UCM!"ucm::map::UCMmap" def: nodes()
+	: Sequence(UCM!"ucm::map::PathNode") = self.nodes;
+
+helper context UCM!"ucm::map::UCMmap" def: getNodes()
+	: Sequence(UML!Node) = self.nodes->collect(n | n.getUmlNode());
+
+helper context UCM!"ucm::map::UCMmap" def: getEdges()
+	: Sequence(UML!ControlFlow) = self.connections->collect(e | e.getUmlEdge());
+
+helper context UCM!"ucm::map::UCMmap" def : getStubs() 
+	: Sequence(UCM!"ucm::map::Stub") 
+	= self.nodes->select(n | n.oclIsTypeOf(UCM!"ucm::map::Stub"));
+
+helper context UCM!"ucm::map::UCMmap" def: getStub()
+	: UCM!"ucm::map::Stub" 
+	= self.parentStub->first().plugin.refImmediateComposite();
+
+helper context UCM!"ucm::map::UCMmap" def :  getStubCount()
+	: Integer 
+	= self.getStubs().size();
+
+helper context UCM!"ucm::map::UCMmap" def : hasNoStubs()
+	: Boolean = self.getStubCount() = 0;
+
+helper context UCM!"ucm::map::UCMmap" def : getFirstStartPoint()
+	: UCM!"ucm::map::StartPoint" 
+	= self.nodes->select(n | n.oclIsTypeOf(UCM!"ucm::map::StartPoint"))->first();
+
+helper context UCM!"ucm::map::UCMmap" def : getFirstEndPoint()
+	: UCM!"ucm::map::EndPoint" 
+	= self.nodes->select(n | 
+		n.oclIsTypeOf(UCM!"ucm::map::EndPoint")) 
+		->select(n | n.outBindings->size() > 0)->first();

@@ -1,0 +1,627 @@
+reate uml: UML from map: UCM;
+
+uses PathNode;
+uses Component;
+uses Stub;
+uses UCMmap;
+uses ComponentRef;
+uses NodeConnection;
+
+--Helper Attributes
+helper def: umlNodes: Sequence(UML!Node) =
+	Sequence{};
+
+helper def: umlEdges: Sequence(UML!ControlFlow) =
+	Sequence{};
+
+helper def: umlGroups: Sequence(UML!ActivityGroup) =
+	Sequence{};
+
+helper def: nodeMap: Map(UCM!"ucm::map::PathNode", UML!Node) =
+	Map{};
+
+helper def: edgeMap: Map(UCM!"ucm::map::NodeConnection", UML!ControlFlow) =
+	Map{};
+
+helper def: stubMap: Map(UCM!"ucm::map::Stub", UML!ActivityPartition) =
+	Map{};
+
+helper def: useCaseMaps: Sequence(UCM!"ucm::map::UCMmap") =
+	UCM!"ucm::map::UCMmap" -> allInstances();
+
+helper def: rootUCM: UCM!"ucm::map::UCMmap" =
+	thisModule.useCaseMaps -> first();
+
+helper def: ucmNodes: Sequence(UCM!"ucm::map::PathNode") =
+	UCM!"ucm::map::PathNode" -> allInstances() -> select(n | not n.
+			oclIsTypeOf(UCM!"ucm::map::Connect"));
+
+helper def: ucmEdges: Sequence(UCM!"ucm::map::NodeConnection") =
+	UCM!"ucm::map::NodeConnection" -> allInstances();
+
+helper def: ucmComponents: Sequence(UCM!"urncore::Component") =
+	UCM!"urncore::Component" -> allInstances();
+
+helper def: rootMapStubs: Sequence(UCM!"ucm::map::Stub") =
+	UCM!"ucm::map::UCMmap" -> allInstances() -> first().getStubs();
+
+	from
+		p: UCM!"ucm::map::StartPoint"
+	to
+		n: UML!InitialNode
+}	
+	
+lazy rule StartPoint_To_InitialNode {
+	to
+		n: UML!InitialNode (
+			name <- p.name
+		)
+}
+
+lazy rule StartPoint_To_InitialNode2 {
+	from
+		p: UCM!"ucm::map::StartPoint" ( 
+		p.abc > 1
+		)
+	to
+		n: UML!InitialNode (
+			name <- p.name
+		)
+}
+
+lazy rule EndPoint_To_FinalNode {
+	from
+		p: UCM!"ucm::map::EndPoint"
+	to
+		n: UML!ActivityFinalNode (
+			name <- p.name
+		)
+}
+
+lazy rule EndPoint_To_FinalNode2 {
+	from
+		p: UCM!"ucm::map::EndPoint" (
+		 p.xyz > 2
+		)
+	to
+		n: UML!ActivityFinalNode (
+			name <- p.name
+		)
+}
+
+lazy rule Responsibility_To_OpaqueAction {
+	from
+		r: UCM!"ucm::map::RespRef"
+	to
+		a: UML!OpaqueAction (
+			name <- r.respDef.name
+		)
+}
+
+lazy rule Timer_To_OpaqueAction {
+	from
+		t: UCM!"ucm::map::Timer"
+	to
+		n: UML!OpaqueAction (
+			name <- t.name + ' (No Action)'
+		)
+}
+
+lazy rule FailurePoint_To_OpaqueAction {
+	from
+		f: UCM!"ucm::map::FailurePoint"
+	to
+		n: UML!OpaqueAction (
+			name <- f.name + ' (Handle Failure)'
+		)
+}
+
+lazy rule AndFork_To_ForkNode {
+	from
+		f: UCM!"ucm::map::AndFork"
+	to
+		n: UML!ForkNode (
+			name <- f.name + ' (Fork)'
+		)
+}
+
+lazy rule AndJoin_To_ForkNode {
+	from
+		f: UCM!"ucm::map::AndJoin"
+	to
+		n: UML!ForkNode (
+			name <- f.name + ' (Join)'
+		)
+}
+
+lazy rule ORFork_To_MergeNode {
+	from
+		o: UCM!"ucm::map::OrFork"
+	to
+		n: UML!MergeNode (
+			name <- o.name + ' (Decision)'
+		)
+}
+
+lazy rule ORJoin_To_MergeNode {
+	from
+		o: UCM!"ucm::map::OrJoin"
+	to
+		n: UML!MergeNode (
+			name <- o.name + ' (Merge)'
+		)
+}
+
+lazy rule WaitingPlace_To_MergeNode {
+	from
+		w: UCM!"ucm::map::WaitingPlace"
+	to
+		n: UML!MergeNode (
+			name <- w.name + ' (Wait)'
+		)
+}
+
+--called rules
+rule AddUmlEdge(edge: UML!ControlFlow) {
+	do {
+		thisModule.umlEdges <- thisModule.umlEdges -> append(edge);
+	}
+}
+
+rule RemoveUmlEdge(edge: UML!ControlFlow) {
+	do {
+		thisModule.umlEdges <- thisModule.umlEdges -> excluding(edge);
+	}
+}
+
+rule RemoveSuccessor(ucmNode: UCM!"ucm::map::PathNode") {
+	using {
+		edge: UCM!"ucm::map::NodeConnection" = ucmNode.firstSuccessor();
+	}
+	do {
+		thisModule.RemoveUcmEdge(edge); 
+	}
+}
+
+rule RemoveUcmEdge(ucmEdge: UCM!"ucm::map::NodeConnection") {
+	do {
+		thisModule.ucmEdges <- thisModule.ucmEdges -> excluding(ucmEdge);
+	}
+}
+
+rule RemoveSecondSuccessor(ucmNode: UCM!"ucm::map::PathNode") {
+	using {
+		ucmEdge: UCM!"ucm::map::NodeConnection" = ucmNode.firstSuccessor().target.
+				firstSuccessor();
+	}
+	do {
+		thisModule.RemoveUcmEdge(ucmEdge); 
+	}
+}
+
+rule RemoveUmlNode(node: UML!Node) {
+	do {
+		thisModule.umlNodes <- thisModule.umlNodes -> excluding(node);
+	}
+}
+
+rule InitUmlEdge(ucmEdge: UCM!"ucm::map::NodeConnection") {
+	using {
+		umlSource: UML!Node = ucmEdge.getSourceUmlNode();
+		umlTarget: UML!Node = ucmEdge.getTargetUmlNode();
+		label: String = ucmEdge.getLabel();
+	}
+	to
+		e: UML!ControlFlow (
+			source <- umlSource,
+			target <- umlTarget,
+			name <- label
+		)
+	do {
+		thisModule.AddEdgeMap(ucmEdge, e); 
+		e; 
+	}
+}
+
+rule Discard(ucmNode: UCM!"ucm::map::PathNode") {
+	do {
+		if(ucmNode.isStub()) {
+		}
+		else {
+			ucmNode.firstPredecessor().target <- ucmNode.firstSuccessor().target;	
+					       --make target of incoming edge the target of the outgoing edge
+			ucmNode.firstSuccessor().target <- ucmNode.firstSuccessor().source;	
+					       --make outgoing edge point to its source ie node
+			thisModule.RemoveSuccessor(ucmNode);
+		}
+	}
+}
+
+rule DiscardEndPoint(ucmNode: UCM!"ucm::map::PathNode") {
+	do {
+		thisModule.RemoveSecondSuccessor(ucmNode);
+		thisModule.RemoveSuccessor(ucmNode);
+					
+		ucmNode.firstPredecessor().target <- ucmNode.secondSuccessor().target;      
+				   --make
+				-- target of incoming edge the target of the outgoing edge of the target
+				-- of the outgoing edge
+		ucmNode.secondSuccessor().target <- ucmNode.secondSuccessor().source; 
+					
+		ucmNode.firstSuccessor().target <- ucmNode.firstSuccessor().source; --make
+				-- outgoing edge point to its source ie node	
+	}
+}
+
+rule InitStaticStrAct(stub: UCM!"ucm::map::Stub") {
+	using {
+		map: UCM!"ucm::map::UCMmap" = stub.getMap();
+		source: UCM!"ucm::map::NodeConnection" = stub.firstPredecessor();
+		target: UCM!"ucm::map::NodeConnection" = stub.firstSuccessor(); 
+	}
+	to
+		a: UML!StructuredActivityNode (
+			incoming <- source.getUmlEdge(),
+			outgoing <- target.getUmlEdge(),
+			node <- map.getNodes(),
+			edge <- map.getEdges(),
+			name <- stub.name
+		)
+	do {
+		thisModule.ProcessStrActElements(stub, a);
+		if(map.hasNoStubs()) {
+			a;
+		}
+		else {
+			thisModule.ProcessNestedMaps(map, a);
+			a;	--return the structured activity
+		}
+	}
+}
+
+rule ProcessNestedMaps(map: UCM!"ucm::map::UCMmap", a: UML!StructuredActivityNode) {
+	do {
+		for(st in map.getStubs()) {
+			if(st.isStatic()) {
+				a.node <- a.node -> append(thisModule.InitStaticStrAct(st));
+	    	}
+	    	--else { deicision nodes not supported inside structured activity node
+	    		--a.node <- a.node -> append(thisModule.InitDecisionNode(st));
+	    		--a.node <- a.node -> append(thisModule.InitMergeNode(st));
+	            --
+	    		--for(map in st.getMaps()) {
+	    			--a.node <- a.node -> append(thisModule.CreateDynStrAct(map, st, a.node
+			--> at(a.node -> size() - 1), a.node -> last()));
+			--	}
+		   -- }	
+		}
+	}
+}
+
+rule ProcessStrActElements(stub: UCM!"ucm::map::Stub", strAct:
+		UML!StructuredActivityNode) {
+	do {
+		if(stub.isComponentPart()) {
+			strAct.inPartition <- stub.getUmlGroup(); --assign its parent activity
+					-- partition 
+		}	
+		for(n in strAct.node) {
+			thisModule.RemoveUmlNode(n); --remove the assigned nodes from nodes of root
+					-- diagram
+		}
+		for(e in strAct.edge) {
+			thisModule.RemoveUmlEdge(e); --remove the assigned edges from the edges of
+					-- the root daigram
+		}
+	}
+}
+
+rule CreateDynStrAct(map: UCM!"ucm::map::UCMmap", stub: UCM!"ucm::map::Stub", s:
+		UML!MergeNode, target: UML!MergeNode) {
+	using {
+		condition: String = stub.getCondition(map);
+	}
+	to
+		a: UML!StructuredActivityNode (
+			node <- map.getNodes(),
+			edge <- map.getEdges(),
+			name <- map.name
+		)
+	do {		
+		a.incoming <- a.incoming -> append(thisModule.InitDecDynEdge(s, a,
+				condition));	
+		thisModule.AddUmlEdge(a.incoming -> last());
+		
+		a.outgoing <- a.outgoing -> append(thisModule.InitDynEdge(a, target));
+		thisModule.AddUmlEdge(a.outgoing -> last());
+		
+		thisModule.ProcessStrActElements(stub, a);
+		if(map.hasNoStubs()) {
+			a;
+		}
+		else {
+			thisModule.ProcessNestedMaps(map, a);
+			a;	--return the structured activity
+		}
+	}
+}
+
+rule InitDynStrAct(map: UCM!"ucm::map::UCMmap", stub: UCM!"ucm::map::Stub") {
+	using {
+		decisionNodeIndex: Integer = thisModule.umlNodes -> size() - 1;
+		decisionNode: UML!MergeNode = thisModule.umlNodes -> at(decisionNodeIndex);
+		mergeNode: UML!MergeNode = thisModule.umlNodes -> last();
+		strAct: UML!StructuredActivityNode = thisModule.CreateDynStrAct(map, stub,
+				decisionNode, mergeNode);
+	}
+	do {
+		thisModule.AddUmlGroup(strAct); 
+	}
+}
+
+rule InitDecDynEdge(s: UML!Node, t: UML!Node, condition: String) {
+	to
+		e: UML!ControlFlow (
+			source <- s,
+			target <- t,
+			name <- condition
+		)
+	do {
+		thisModule.AddUmlEdge(e); 
+		e; 
+	}
+}
+
+rule InitDynEdge(s: UML!Node, t: UML!Node) {
+	to
+		e: UML!ControlFlow (
+			source <- s,
+			target <- t
+		)
+	do {
+		thisModule.AddUmlEdge(e); 
+		e; 
+	}
+}
+
+rule TransformStub(stub: UCM!"ucm::map::Stub") {
+	do {
+		if(stub.isStatic()) {
+	    	thisModule.TranformStaticStub(stub);
+	    }
+	    else {
+	    	thisModule.TransformDynamicStub(stub);
+	    }	
+	}
+}
+
+rule TransformStubNodes(ucmNode: UCM!"ucm::map::PathNode") {
+	do {
+		if(ucmNode.isDiscardable()) { 
+			thisModule.Discard(ucmNode);
+		}
+		else {
+			if(ucmNode.isWaitingEndPoint()) {
+				thisModule.DiscardEndPoint(ucmNode);
+			}
+			else {
+				thisModule.InitStubUmlNode(ucmNode);
+			}
+		}
+	}
+}
+
+rule InitStubUmlNode(ucmNode: UCM!"ucm::map::PathNode") {
+	using {
+		umlNode: UML!Node = ucmNode.toUmlNode();
+	}
+	do {
+		--thisModule.AddUmlNode(umlNode);
+		thisModule.AddNodeMap(ucmNode); 
+	}
+}
+
+rule InitUmlNode(ucmNode: UCM!"ucm::map::PathNode") {
+	using {
+		umlNode: UML!Node = ucmNode.toUmlNode();
+	}
+	do {
+		thisModule.AddUmlNode(umlNode); 
+		thisModule.AddNodeMap(ucmNode); 
+	}
+}
+
+rule TransformNode(ucmNode: UCM!"ucm::map::PathNode") {
+	do {
+		if(ucmNode.isDiscardable()) { 
+			thisModule.Discard(ucmNode);
+		}
+		else {
+			if(ucmNode.isWaitingEndPoint()) {
+				thisModule.DiscardEndPoint(ucmNode);
+			}
+			else {
+				thisModule.InitUmlNode(ucmNode);
+			}
+		}
+	}
+}
+
+rule TranformStaticStub(stub: UCM!"ucm::map::Stub") {
+	using {
+		strAct: UML!StructuredActivityNode = thisModule.InitStaticStrAct(stub);
+	}
+	do {
+		thisModule.AddUmlGroup(strAct); 
+	}
+}
+
+rule TransformDynamicStub(stub: UCM!"ucm::map::Stub") {
+	do {
+		thisModule.InitDecisionNode(stub); 
+		thisModule.InitMergeNode(stub); 
+		thisModule.InitDynStrActs(stub); 
+	}
+}
+
+rule InitMergeNode(dynamicStub: UCM!"ucm::map::Stub") {
+	using {
+		label: String = dynamicStub.name + ' (Dynamic Merge)';
+	    ucmEdge: UCM!"ucm::map::NodeConnection" = dynamicStub.firstSuccessor();
+		outgoingEdge: UML!ControlFlow = ucmEdge.getUmlEdge();
+	}
+	to
+		n: UML!MergeNode (
+			name <- label,
+			outgoing <- outgoingEdge
+		)
+	do {
+		thisModule.AddUmlNode(n); 
+		n; 
+	}
+}
+
+rule InitDecisionNode(dynamicStub: UCM!"ucm::map::Stub") {
+	using {
+		label: String = dynamicStub.name + ' (Dynamic Decision)';
+		ucmEdge: UCM!"ucm::map::NodeConnection" = dynamicStub.firstPredecessor();
+		incomingEdge: UML!ControlFlow = ucmEdge.getUmlEdge();
+	}
+	to
+		n: UML!MergeNode (
+			incoming <- incomingEdge,
+			name <- label
+		)
+	do {
+		thisModule.AddUmlNode(n); 
+		n; 
+	}
+}
+
+rule AddUmlNode(node: UML!Node) {
+	do {
+		thisModule.umlNodes <- thisModule.umlNodes -> including(node);
+	}
+}
+
+rule InitDynStrActs(stub: UCM!"ucm::map::Stub") {
+	using {
+		maps: Sequence(UCM!"ucm::map::UCMmap") = stub.getMaps();
+	}
+	do {
+		for(map in maps) {
+			thisModule.InitDynStrAct(map, stub);
+		}
+	}
+}
+
+rule InitUmlGroup(compRef: UCM!"ucm::map::ComponentRef") {
+	using {
+		groupName: String = compRef.groupName();
+		groupNodes: Sequence(UML!Node) = compRef.getUmlNodes();
+	}
+	to
+		a: UML!ActivityPartition (
+			name <- groupName,
+			node <- groupNodes
+		)
+	do {		
+		if(compRef.hasStubs()) {
+			for(stub in compRef.getStubs()) {
+				--thisModule.AddStubMap(stub, a);
+			}
+		}
+		if(compRef.hasNoChildren()) {
+			a;	
+		}
+		else {       	
+			a.subpartition <- compRef.getUmlSubGroups();
+			a;
+		}
+	}
+}
+
+rule AddStubMap(stub: UCM!"ucm::map::Stub", group: UML!ActivityPartition) {
+	do {
+		thisModule.stubMap <- thisModule.stubMap -> including(stub, group);
+	}
+}
+
+rule TransformEdge(ucmEdge: UCM!"ucm::map::NodeConnection") {
+	using {
+		umlEdge: UML!ControlFlow = thisModule.InitUmlEdge(ucmEdge);
+	}
+	do {
+		thisModule.AddUmlEdge(umlEdge); 
+	}
+}
+
+rule TransformComponent(component: UCM!"ucm::map::Component") {
+	using {
+		compRef: UCM!"ucm::map::ComponentRef" = component.getReference();
+	}
+	do {
+		if(component.hasNoParent()) {
+			thisModule.AddUmlGroup(thisModule.InitUmlGroup(compRef));
+		}
+	}
+}
+
+rule AddUmlGroup(group: UML!ActivityGroup) {
+	do {
+		thisModule.umlGroups <- thisModule.umlGroups -> including(group);
+	}
+}
+
+rule AddNodeMap(ucmNode: UCM!"ucm::map::PathNode") {
+	using {
+		umlNode: UML!Node = thisModule.umlNodes -> last();
+	}
+	do {
+		thisModule.nodeMap <- thisModule.nodeMap -> including(ucmNode, umlNode);
+	}
+}
+
+rule AddEdgeMap(ucmEdge: UCM!"ucm::map::NodeConnection", umlEdge: UML!ControlFlow) {
+	do {
+		thisModule.edgeMap <- thisModule.edgeMap -> including(ucmEdge, umlEdge);
+	}
+}
+
+--Startup
+entrypoint rule Main() {
+	do {
+		for(ucmNode in thisModule.ucmNodes) {	
+	  		thisModule.TransformNode(ucmNode);
+		}
+		for(ucmEdge in thisModule.ucmEdges) {
+	  		thisModule.TransformEdge(ucmEdge);	
+		}
+		for(component in thisModule.ucmComponents) {
+			thisModule.TransformComponent(component);
+		}
+		for(stub in thisModule.rootMapStubs) {
+	  		thisModule.TransformStub(stub);
+		}
+	}
+}
+
+--Matched Rule
+rule URNDefinition_To_UMLPackage {
+	from
+		d: UCM!"urn::URNspec"
+	to
+		p: UML!Package (
+			packagedElement <- a
+		),
+		a: UML!Activity (
+			name <- thisModule.rootUCM.name,
+			node <- thisModule.umlNodes,
+			edge <- thisModule.umlEdges,
+			group <- thisModule.umlGroups
+		)
+	do {
+		p.debug('Transformation done!'); 
+	}
+}
+

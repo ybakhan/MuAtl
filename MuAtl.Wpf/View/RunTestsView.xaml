@@ -1,0 +1,398 @@
+﻿<v:MuAtlViewBase x:Class="MuAtl.View.RunTestsView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ignore="http://www.ignore.com"
+        mc:Ignorable="d ignore"
+        xmlns:v="clr-namespace:MuAtl.View"
+        xmlns:convrtr="clr-namespace:MuAtl.View.Util.Converter"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
+        xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+        xmlns:dat="clr-namespace:System.Windows.Data;assembly=PresentationFramework"
+        xmlns:vutil="clr-namespace:MuAtl.View.Util"
+        DataContext="{Binding MutantExecutionViewModel, Source={StaticResource Locator}}">
+
+  <v:MuAtlViewBase.Resources>
+
+    <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+    <convrtr:InverseBooleanConverter x:Key="inverseConverter" />
+    <convrtr:CollectionCountToVisibilityConverter x:Key="collCountToVisCnvrtr" />
+    <convrtr:GroupCollectionToIsChecked x:Key="groupConverter" />
+    <convrtr:SelectionListToIsChecked x:Key="tcConverter" />
+    <convrtr:BiCollectionCountToVisibilityConverter x:Key="biCollCountToVisCnvrtr" />
+    <convrtr:InvertedVisibilityConverter x:Key="invVisCnvrtr" />
+
+    <CollectionViewSource Source="{Binding SelectionTestCases}" x:Key="tcsource">
+      <CollectionViewSource.SortDescriptions>
+        <scm:SortDescription PropertyName="Item.Name"/>
+      </CollectionViewSource.SortDescriptions>
+    </CollectionViewSource>
+
+    <CollectionViewSource Source="{Binding SelectionMutants}" x:Key="msource">
+      <CollectionViewSource.GroupDescriptions>
+        <dat:PropertyGroupDescription PropertyName="Item.Type"/>
+      </CollectionViewSource.GroupDescriptions>
+      <CollectionViewSource.SortDescriptions>
+        <scm:SortDescription PropertyName="Item.Type"  />
+        <scm:SortDescription PropertyName="Item.Name" />
+      </CollectionViewSource.SortDescriptions>
+    </CollectionViewSource>
+
+  </v:MuAtlViewBase.Resources>
+
+  <ScrollViewer Style="{StaticResource ScrllStyle}">
+
+    <DockPanel>
+
+      <Border Style="{StaticResource GridBrdrStyle}" x:Name="GridExecute">
+
+        <Border.Visibility>
+
+          <MultiBinding Converter="{StaticResource biCollCountToVisCnvrtr}">
+
+            <Binding Path="Project.TestSuite.Count" />
+            <Binding Path="Project.Mutants.Count" />
+
+          </MultiBinding>
+
+        </Border.Visibility>
+
+        <vutil:BorderGrid>
+
+          <vutil:BorderGrid.RowDefinitions>
+
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="625"/>
+
+          </vutil:BorderGrid.RowDefinitions>
+
+          <vutil:BorderGrid.ColumnDefinitions>
+
+            <ColumnDefinition Width="200" />
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="Auto"/>
+
+          </vutil:BorderGrid.ColumnDefinitions>
+
+          <TextBlock Grid.Row="0"
+                     Grid.Column="0"
+                    Style="{StaticResource BoldTxtBlockStyle}"
+                    Text="Mutants" />
+
+          <TextBlock 
+                         Style="{StaticResource BoldTxtBlockStyle}"
+                         Grid.Row="0"
+                         Grid.Column="1"
+                         Text="Test Cases"  />
+
+          <TextBlock Grid.Row="0"                      
+                       Grid.Column="2"
+                       Style="{StaticResource BoldTxtBlockStyle}"
+                       Text="Configuration"  />
+
+          <ItemsControl x:Name="tvMutant"
+                        BorderThickness="0,0,1,0"
+                        BorderBrush="Black"
+                        Style="{StaticResource ItemsControlStyle}"
+                        IsEnabled="{Binding Project.IsRunning, Converter={StaticResource inverseConverter}}"
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Margin="5"
+                        ItemsSource="{Binding Source={StaticResource msource}}"
+                        Visibility="{Binding SelectionMutants.Count, Converter={StaticResource collCountToVisCnvrtr}}" >
+            <ItemsControl.GroupStyle>
+              <GroupStyle>
+                <GroupStyle.ContainerStyle>
+                  <Style TargetType="{x:Type GroupItem}">
+                    <Setter Property="Template">
+                      <Setter.Value>
+                        <ControlTemplate>
+                          <Expander IsExpanded="True"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Top"
+                                    Style="{StaticResource ExpanderStyle}">
+
+                            <Expander.Header>
+
+                              <CheckBox Content="{Binding Name}">
+
+                                <CheckBox.IsChecked>
+                                  <MultiBinding
+                                        Converter="{StaticResource groupConverter}" Mode="OneWay">
+                                    <Binding Path="DataContext.SelectionMutants"
+                                             ElementName="tvMutant" />
+                                    <Binding Path="DataContext.SelectionMutants.SelectedItems"
+                                             ElementName="tvMutant" />
+                                    <Binding Path="Name" />
+                                  </MultiBinding>
+                                </CheckBox.IsChecked>
+
+                                <i:Interaction.Triggers>
+                                  <i:EventTrigger EventName="Checked">
+                                    <cmd:EventToCommand
+                                          CommandParameter="{Binding Name}"
+                                          Command="{Binding DataContext.CheckMutantTypeCmd, ElementName=tvMutant}" />
+                                  </i:EventTrigger>
+
+                                  <i:EventTrigger EventName="Unchecked">
+                                    <cmd:EventToCommand
+                                          CommandParameter="{Binding Name}"
+                                          Command="{Binding DataContext.UnCheckMutantTypeCmd, ElementName=tvMutant}" />
+                                  </i:EventTrigger>
+
+                                </i:Interaction.Triggers>
+
+                              </CheckBox>
+
+                            </Expander.Header>
+
+                            <ItemsPresenter />
+
+                          </Expander>
+                        </ControlTemplate>
+                      </Setter.Value>
+                    </Setter>
+                  </Style>
+                </GroupStyle.ContainerStyle>
+              </GroupStyle>
+              <GroupStyle />
+            </ItemsControl.GroupStyle>
+
+            <ItemsControl.ItemTemplate>
+              <DataTemplate>
+                <CheckBox Margin="30,0,0,0"
+                          IsChecked="{Binding IsSelected}" 
+                          Content="{Binding Item.Name}" />
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+
+          </ItemsControl>
+
+          <StackPanel Margin="5"
+                     Grid.Column="1"
+                     IsEnabled="{Binding Project.IsRunning, Converter={StaticResource inverseConverter}}"
+                     Grid.Row="1">
+
+            <CheckBox Content="All"
+                      Visibility="{Binding SelectionTestCases.Count, Converter={StaticResource collCountToVisCnvrtr}}">
+
+              <CheckBox.IsChecked>
+                <MultiBinding Converter="{StaticResource tcConverter}" Mode="OneWay">
+                  <Binding Path="SelectionTestCases.SelectedItems"  />
+                  <Binding Path="SelectionTestCases"  />
+                </MultiBinding>
+              </CheckBox.IsChecked>
+
+              <i:Interaction.Triggers>
+                <i:EventTrigger EventName="Checked">
+                  <cmd:EventToCommand Command="{Binding SelectAllTestCaseCmd}" />
+                </i:EventTrigger>
+
+                <i:EventTrigger EventName="Unchecked">
+                  <cmd:EventToCommand Command="{Binding UnSelectAllTestCaseCmd}" />
+                </i:EventTrigger>
+              </i:Interaction.Triggers>
+
+            </CheckBox>
+
+            <ItemsControl
+                  Margin="10,0,0,0"
+                  Style="{StaticResource ItemsControlStyle}"
+                  ScrollViewer.VerticalScrollBarVisibility="Auto"
+                  ItemsSource="{Binding Source={StaticResource tcsource}}"
+                  Visibility="{Binding SelectionTestCases.Count, Converter={StaticResource collCountToVisCnvrtr}}">
+              <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                  <CheckBox IsChecked="{Binding IsSelected}"
+                            Content="{Binding Item.Name}"/>
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+          </StackPanel>
+
+          <StackPanel Grid.Row="1"
+                      Margin="2"
+                     Grid.Column="2">
+
+            <Grid IsEnabled="{Binding Project.IsRunning, Converter={StaticResource inverseConverter}}">
+
+              <Grid.RowDefinitions>
+
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+
+              </Grid.RowDefinitions>
+
+              <Grid.ColumnDefinitions>
+
+                <ColumnDefinition Width="120" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+
+              </Grid.ColumnDefinitions>
+
+              <TextBlock Text="ATL Compiler" 
+                             Grid.Column="0"
+                             Style="{StaticResource TxtBlckStyle}"
+                             Grid.Row="0"/>
+
+              <TextBlock Text="ATL Virtual Machine" 
+                             Grid.Column="0"
+                         TextWrapping="Wrap"
+                             Style="{StaticResource TxtBlckStyle}"
+                             Grid.Row="1"/>
+
+              <TextBlock Text="Handlers" 
+                           Grid.Row="2"
+                           Grid.Column="0"
+                           Style="{StaticResource TxtBlckStyle}" />
+
+              <Grid Grid.Row="2" Grid.Column="1">
+
+                <Grid.RowDefinitions>
+                  <RowDefinition Height="Auto" />
+                  <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <ItemsControl Style="{StaticResource ItemsControlStyle}"
+                            ItemsSource="{Binding Project.Dependency.InMetamodels}"
+                            Grid.Row="0">
+
+                  <ItemsControl.ItemTemplate>
+
+                    <DataTemplate>
+
+                      <StackPanel Orientation="Horizontal">
+
+                        <TextBlock 
+                        Text="{Binding Name}" Style="{StaticResource TxtBlckStyle}" />
+
+                        <ComboBox 
+                        SelectedItem="{Binding Handler}" Style="{StaticResource CmBxStyle}">
+                          <ComboBoxItem></ComboBoxItem>
+                          <ComboBoxItem>EMF</ComboBoxItem>
+                          <ComboBoxItem>UML</ComboBoxItem>
+                        </ComboBox>
+
+                      </StackPanel>
+
+                    </DataTemplate>
+
+                  </ItemsControl.ItemTemplate>
+
+                </ItemsControl>
+
+                <StackPanel Orientation="Horizontal"
+                          Grid.Row="1">
+
+                  <TextBlock Style="{StaticResource TxtBlckStyle}"
+                           Text="{Binding Project.Dependency.OutMetamodel.Name}" />
+
+                  <ComboBox SelectedItem="{Binding Project.Dependency.OutMetamodel.Handler}" 
+                          Style="{StaticResource CmBxStyle}">
+                    <ComboBoxItem></ComboBoxItem>
+                    <ComboBoxItem>EMF</ComboBoxItem>
+                    <ComboBoxItem>UML</ComboBoxItem>
+                  </ComboBox>
+
+                </StackPanel>
+
+              </Grid>
+
+              <TextBlock Text="Required for ASM virtual machine" Style="{StaticResource TxtBlckStyle}" Grid.Row="2" Grid.Column="2"/>
+              
+              <TextBlock Text="Support UML2 stereotypes" 
+                             Grid.Column="0"
+                             TextWrapping="Wrap"
+                             Style="{StaticResource TxtBlckStyle}"
+                             Grid.Row="3"/>
+
+              <TextBlock Text="Allow inter-model references" 
+                             Grid.Column="0"
+                             TextWrapping="Wrap"
+                             Style="{StaticResource TxtBlckStyle}"
+                             Grid.Row="4"/>
+
+              <ComboBox ItemsSource="{Binding Compilers}"
+                            Grid.Column="1" 
+                            Grid.Row="0"
+                            Style="{StaticResource CmBxStyle}"
+                            SelectedItem="{Binding Compiler}" />
+
+              <ComboBox ItemsSource="{Binding Vms}"
+                            Grid.Column="1" 
+                            Grid.Row="1"
+                            Style="{StaticResource CmBxStyle}"
+                            SelectedItem="{Binding Vm}" />
+
+              <CheckBox IsChecked="{Binding Uml2Strtypes}"
+                            Style="{StaticResource ChkBxStyle}"
+                            Grid.Row="3"
+                            Grid.Column="1"/>
+
+              <CheckBox IsChecked="{Binding InterModelRefs}"
+                            Style="{StaticResource ChkBxStyle}"
+                            Grid.Row="4"
+                            Grid.Column="1"/>
+
+            </Grid>
+
+            <StackPanel Orientation="Horizontal"
+                          HorizontalAlignment="Center">
+
+              <Button Content="Execute"                   
+                    Command="{Binding ExecuteCmd}"
+                    IsEnabled="{Binding Project.IsRunning, Converter={StaticResource inverseConverter}}"
+                    Width="100"
+                    Margin="5"
+                    Height="25" />
+
+              <Button Content="Abort"                   
+                    Command="{Binding AbortCmd}"
+                    Visibility="{Binding Project.IsRunning, Converter={StaticResource BoolToVis}}"
+                    Width="100"
+                    Margin="5"
+                    Height="25" />
+
+            </StackPanel>
+
+            <Grid Margin="5" 
+                    Width="600"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
+
+              <ProgressBar Value="{Binding ExecutionProgress}"
+                         Visibility="{Binding Project.IsRunning, Converter={StaticResource BoolToVis}}" 
+                         Height="25"
+                         Maximum="100"/>
+
+              <TextBlock Text="{Binding ProgressMessage}"
+                           Margin="5"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center" />
+            </Grid>
+
+          </StackPanel>
+
+        </vutil:BorderGrid>
+
+      </Border>
+
+      <TextBlock Text="Define test cases and generate mutants"
+               Margin="5"
+               Visibility="{Binding Path=Visibility, ElementName=GridExecute, Converter={StaticResource invVisCnvrtr}}"
+               FontWeight="Bold" />
+
+    </DockPanel>
+
+  </ScrollViewer>
+
+</v:MuAtlViewBase>

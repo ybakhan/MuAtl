@@ -1,0 +1,112 @@
+library PathNode;
+
+helper context UCM!"ucm::map::PathNode" def: getUmlNode()
+	:  UML!Node = thisModule.nodeMap->get(self);
+
+helper context UCM!"ucm::map::PathNode" def : isDiscardable() 
+	: Boolean 
+	= self.oclIsTypeOf(UCM!"ucm::map::DirectionArrow") or 
+	  self.oclIsTypeOf(UCM!"ucm::map::EmptyPoint") or 
+	  self.oclIsTypeOf(UCM!"ucm::map::Stub");
+			
+helper context UCM!"ucm::map::PathNode" def : isStub() 
+	: Boolean
+	= self.oclIsTypeOf(UCM!"ucm::map::Stub");
+
+helper context UCM!"ucm::map::PathNode" def : hasAsuccessor()
+	: Boolean 
+	= self.succ->size() = 1;
+
+helper context UCM!"ucm::map::PathNode" def : isConnectedToWaitingPlace() 
+	: Boolean 
+	= self.succ->first().
+		target.oclIsTypeOf(UCM!"ucm::map::Connect");
+
+helper context UCM!"ucm::map::PathNode" def : isWaitingEndPoint() 
+	: Boolean 
+	= if self.isEndPoint()
+	  then
+	  	if self.hasAsuccessor()
+		then
+			if self.isConnectedToWaitingPlace() 
+			then
+				true
+			else
+				false
+			endif
+		else
+			false
+		endif
+	  else
+	  	false
+	  endif;
+
+helper context UCM!"ucm::map::PathNode" def : isEndPoint() 
+	: Boolean 
+	= self.oclIsTypeOf(UCM!"ucm::map::EndPoint");
+
+helper context UCM!"ucm::map::PathNode" def : firstPredecessor() 
+	: UCM!"ucm::map::NodeConnection" 
+	= self.pred->first();
+
+helper context UCM!"ucm::map::PathNode" def : firstSuccessor() 
+	: UCM!"ucm::map::NodeConnection" 
+	= self.succ->first();
+
+helper context UCM!"ucm::map::PathNode" def : secondSuccessor() 
+	: UCM!"ucm::map::NodeConnection" 
+	= self.firstSuccessor().target.firstSuccessor();
+
+helper context UCM!"ucm::map::PathNode" def : toUmlNode() 
+	: UML!Node	
+	= if self.oclIsTypeOf(UCM!"ucm::map::StartPoint")
+	  then
+	  	thisModule.StartPoint_To_InitialNode(self)										
+	  else
+	  	if self.oclIsTypeOf(UCM!"ucm::map::EndPoint")
+		then
+	  		thisModule.EndPoint_To_FinalNode(self)
+		else
+			if self.oclIsTypeOf(UCM!"ucm::map::RespRef")
+			then
+				thisModule.Responsibility_To_OpaqueAction(self)
+			else
+				if self.oclIsTypeOf(UCM!"ucm::map::OrFork")
+				then
+					thisModule.ORFork_To_MergeNode(self)	
+				else
+					if self.oclIsTypeOf(UCM!"ucm::map::OrJoin")
+					then
+						thisModule.ORJoin_To_MergeNode(self)
+					else
+						if self.oclIsTypeOf(UCM!"ucm::map::AndFork")
+						then
+							thisModule.AndFork_To_ForkNode(self)
+						else
+							if self.oclIsTypeOf(UCM!"ucm::map::AndJoin")
+							then
+								thisModule.AndJoin_To_ForkNode(self)
+							else
+								if self.oclIsTypeOf(UCM!"ucm::map::Timer")
+								then
+									thisModule.Timer_To_OpaqueAction(self)
+								else
+									if self.oclIsTypeOf(UCM!"ucm::map::FailurePoint")
+									then
+										thisModule.FailurePoint_To_OpaqueAction(self)
+									else
+										if self.oclIsTypeOf(UCM!"ucm::map::WaitingPlace")
+										then
+											thisModule.WaitingPlace_To_MergeNode(self)
+										else
+											self.debug('EMPTY NODE')
+										endif
+									endif
+								endif
+							endif
+						endif
+					endif
+				endif
+			endif
+		endif
+	  endif;

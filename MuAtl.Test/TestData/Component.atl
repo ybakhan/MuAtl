@@ -1,0 +1,17 @@
+library Component;
+
+helper context UCM!"urncore::Component" def : hasNoParent()
+	: Boolean 
+	= self.contRefs->first().parent.oclIsUndefined();
+
+helper context UCM!"urncore::Component" def : getReference()
+	: UCM!"ucm::map::ComponentRef" 
+	= self.contRefs->first();
+
+helper context UCM!"urncore::Component"  def : getStubs()
+	: Sequence(UCM!"ucm::map::Stub") 
+	= self.getReference().getStubs();
+
+helper context UCM!"urncore::Component"  def : hasStubs()
+	: Boolean 
+	=  self.getStubs()->size() > 0;

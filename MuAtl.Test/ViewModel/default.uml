@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Package xmi:version="2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmlns:uml="http://www.eclipse.org/uml2/3.0.0/UML" xmi:id="_Ml5KgF5JEeKcWLpd0lxg3Q">
+   <elementImport xmi:id="_7aNegF_xEeKqvv0JVRs8cQ">
+    <importedElement xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>
+  </elementImport>
+  <elementImport xmi:id="_7aNegV_xEeKqvv0JVRs8cQ">
+    <importedElement xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+  </elementImport>
+  <elementImport xmi:id="_7aNegl_xEeKqvv0JVRs8cQ">
+    <importedElement xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#UnlimitedNatural"/>
+  </elementImport>
+  <elementImport xmi:id="_7aNeg1_xEeKqvv0JVRs8cQ">
+    <importedElement xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+  </elementImport>
+  <packagedElement xmi:type="uml:Activity" xmi:id="_Nl8SQF5JEeKcWLpd0lxg3Q" name="TC1">
+    <node xmi:type="uml:InitialNode" xmi:id="_PDMTYF5JEeKcWLpd0lxg3Q" name="SP" outgoing="_zg8cwHs7EeKGg9mvR2eFzQ"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_X4OaYF5JEeKcWLpd0lxg3Q" name="Ra" outgoing="_BGnLwHs9EeKGg9mvR2eFzQ" incoming="_--awMHs8EeKGg9mvR2eFzQ"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_Yzqu8F5JEeKcWLpd0lxg3Q" name="Rb" outgoing="_CdWVMHs9EeKGg9mvR2eFzQ" incoming="_B0rysHs9EeKGg9mvR2eFzQ"/>
+    <node xmi:type="uml:ActivityFinalNode" xmi:id="_RUzogF58EeKcWLpd0lxg3Q" name="EP" incoming="_DK4JkHs9EeKGg9mvR2eFzQ"/>
+    <node xmi:type="uml:ForkNode" xmi:id="_mbvhEHs7EeKGg9mvR2eFzQ" name="AF (Fork)" outgoing="_--awMHs8EeKGg9mvR2eFzQ _B0rysHs9EeKGg9mvR2eFzQ" incoming="_zg8cwHs7EeKGg9mvR2eFzQ"/>
+    <node xmi:type="uml:ForkNode" xmi:id="_Wk2EYHs8EeKGg9mvR2eFzQ" name="AF (Join)" outgoing="_DK4JkHs9EeKGg9mvR2eFzQ" incoming="_BGnLwHs9EeKGg9mvR2eFzQ _CdWVMHs9EeKGg9mvR2eFzQ"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_zg8cwHs7EeKGg9mvR2eFzQ" source="_PDMTYF5JEeKcWLpd0lxg3Q" target="_mbvhEHs7EeKGg9mvR2eFzQ"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_--awMHs8EeKGg9mvR2eFzQ" source="_mbvhEHs7EeKGg9mvR2eFzQ" target="_X4OaYF5JEeKcWLpd0lxg3Q"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_BGnLwHs9EeKGg9mvR2eFzQ" source="_X4OaYF5JEeKcWLpd0lxg3Q" target="_Wk2EYHs8EeKGg9mvR2eFzQ"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_B0rysHs9EeKGg9mvR2eFzQ" source="_mbvhEHs7EeKGg9mvR2eFzQ" target="_Yzqu8F5JEeKcWLpd0lxg3Q"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_CdWVMHs9EeKGg9mvR2eFzQ" source="_Yzqu8F5JEeKcWLpd0lxg3Q" target="_Wk2EYHs8EeKGg9mvR2eFzQ"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_DK4JkHs9EeKGg9mvR2eFzQ" source="_Wk2EYHs8EeKGg9mvR2eFzQ" target="_RUzogF58EeKcWLpd0lxg3Q"/>
+  </packagedElement>
+</uml:Package>

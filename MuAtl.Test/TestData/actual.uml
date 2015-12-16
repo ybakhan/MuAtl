@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<uml:Package xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:uml="http://www.eclipse.org/uml2/3.0.0/UML" xsi:schemaLocation="http://www.eclipse.org/uml2/3.0.0/UML file:/I:/yak/Dropbox/Eclipse/workspaces/masterproj/UCM_2_AD/Metamodel/OUT/UML.ecore" xmi:id="_eybKkDOdEeW8yvL7aOkj1Q">
+  <packagedElement xmi:type="uml:Activity" xmi:id="_eybKkTOdEeW8yvL7aOkj1Q" name="TC1">
+    <node xmi:type="uml:InitialNode" xmi:id="_eybKkjOdEeW8yvL7aOkj1Q" name="SP" outgoing="_eybKmDOdEeW8yvL7aOkj1Q"/>
+    <node xmi:type="uml:ForkNode" xmi:id="_eybKkzOdEeW8yvL7aOkj1Q" name="AF (Fork)" outgoing="_eybKmTOdEeW8yvL7aOkj1Q _eybKmjOdEeW8yvL7aOkj1Q" incoming="_eybKmDOdEeW8yvL7aOkj1Q"/>
+    <node xmi:type="uml:ActivityFinalNode" xmi:id="_eybKlDOdEeW8yvL7aOkj1Q" name="EP" incoming="_eybKmzOdEeW8yvL7aOkj1Q"/>
+    <node xmi:type="uml:ForkNode" xmi:id="_eybKlTOdEeW8yvL7aOkj1Q" name="AJ (Join)" outgoing="_eybKmzOdEeW8yvL7aOkj1Q" incoming="_eybKnDOdEeW8yvL7aOkj1Q _eybKnTOdEeW8yvL7aOkj1Q"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_eybKljOdEeW8yvL7aOkj1Q" name="Ra" outgoing="_eybKnDOdEeW8yvL7aOkj1Q" incoming="_eybKmjOdEeW8yvL7aOkj1Q"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_eybKlzOdEeW8yvL7aOkj1Q" name="Rb" outgoing="_eybKnTOdEeW8yvL7aOkj1Q" incoming="_eybKmTOdEeW8yvL7aOkj1Q"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_eybKmDOdEeW8yvL7aOkj1Q" name="" source="_eybKkjOdEeW8yvL7aOkj1Q" target="_eybKkzOdEeW8yvL7aOkj1Q"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_eybKmTOdEeW8yvL7aOkj1Q" name="" source="_eybKkzOdEeW8yvL7aOkj1Q" target="_eybKlzOdEeW8yvL7aOkj1Q"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_eybKmjOdEeW8yvL7aOkj1Q" name="" source="_eybKkzOdEeW8yvL7aOkj1Q" target="_eybKljOdEeW8yvL7aOkj1Q"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_eybKmzOdEeW8yvL7aOkj1Q" name="" source="_eybKlTOdEeW8yvL7aOkj1Q" target="_eybKlDOdEeW8yvL7aOkj1Q"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_eybKnDOdEeW8yvL7aOkj1Q" name="" source="_eybKljOdEeW8yvL7aOkj1Q" target="_eybKlTOdEeW8yvL7aOkj1Q"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_eybKnTOdEeW8yvL7aOkj1Q" name="" source="_eybKlzOdEeW8yvL7aOkj1Q" target="_eybKlTOdEeW8yvL7aOkj1Q"/>
+  </packagedElement>
+</uml:Package>

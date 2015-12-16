@@ -1,0 +1,27 @@
+-- ===================================================================================================================
+-- ATL Refinings of Use Case AntiPatterns 
+-- Created as part of M.Sc. thesis at King Fahd University of Petroleum & Minerals
+-- Author: Yasser Ali Khan (yasera at kfupm.edu.sa)
+-- Supervisor: Dr. Mohamed El-Attar
+-- Antipattern: Actor-Generalized UC Association
+-- Refactoring: Abstract Generalized UC
+-- ===================================================================================================================
+-- @atlcompiler atl2010
+
+module ConcreteToAbstract;
+create OUT : UML refining IN : UML;
+
+uses UseCase;
+uses Association;
+uses Actor;
+
+rule AbstractGeneralizedCase {
+  from s: UML!UseCase (
+	  s.isGeneralization() and s.isConcrete() and not (s.isIncluder() or 
+      s.isExtension() or s.isExtended()) and ((s.isAssociatedWithActor() and not s.isIncluded())  or 
+      s.isIndirectlyAssociatedWithActor())
+	)
+	to t: UML!UseCase (
+	  isAbstract<-true
+	)
+}
